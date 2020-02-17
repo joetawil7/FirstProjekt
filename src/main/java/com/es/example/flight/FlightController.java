@@ -1,7 +1,9 @@
 package com.es.example.flight;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,12 +21,13 @@ public class FlightController {
     FlightService flightService;
 
     public FlightController(FlightService flightService){
+
         this.flightService = flightService;
     }
 
-    @GetMapping("/flights")
+    @GetMapping(value = "/flights", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<List<Flight>> searchFlights(@RequestParam String from, @RequestParam String to, @RequestParam String departure, @RequestParam String arrival){
+    public ResponseEntity<List<Flight>> searchFlights(@RequestParam String from, @RequestParam String to, @RequestParam String departure, @RequestParam String arrival) throws Exception{
         ZoneId zone = ZoneId.of("Europe/Berlin");
         LocalDate ld1 = LocalDate.parse(departure);
         OffsetDateTime dep = ld1.atStartOfDay(zone).toOffsetDateTime();
